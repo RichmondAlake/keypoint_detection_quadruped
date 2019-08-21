@@ -8,12 +8,9 @@ import torchvision.models.detection.mask_rcnn
 from coco_utils import get_coco_api_from_dataset
 from coco_eval import CocoEvaluator
 import utils
-import torch.utils.tensorboard import SummaryWriter
-
 
 def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq):
     model.train()
-    writer = SummaryWriter()
     metric_logger = utils.MetricLogger(delimiter="  ")
     metric_logger.add_meter('lr', utils.SmoothedValue(window_size=1, fmt='{value:.6f}'))
     header = 'Epoch: [{}]'.format(epoch)
@@ -54,8 +51,6 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq):
         metric_logger.update(loss=losses_reduced, **loss_dict_reduced)
         metric_logger.update(lr=optimizer.param_groups[0]["lr"])
         
-        writer.add_scalars("Loss/train", losses_reduced, epoch)
-
 
 def _get_iou_types(model):
     model_without_ddp = model
